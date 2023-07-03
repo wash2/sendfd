@@ -141,7 +141,7 @@ fn recv_with_fd(socket: RawFd, bs: &mut [u8], mut fds: &mut [RawFd]) -> io::Resu
                 let data_ptr = libc::CMSG_DATA(cmsg_header);
                 let data_offset = ptr_offset_from(data_ptr, cmsg_header as *const _);
                 debug_assert!(data_offset >= 0);
-                let data_byte_count = (*cmsg_header).cmsg_len as usize - data_offset as usize;
+                let data_byte_count = (*cmsg_header).cmsg_len - data_offset as usize;
                 debug_assert!((*cmsg_header).cmsg_len as isize > data_offset);
                 debug_assert!(data_byte_count % mem::size_of::<RawFd>() == 0);
                 let rawfd_count = (data_byte_count / mem::size_of::<RawFd>()) as isize;
